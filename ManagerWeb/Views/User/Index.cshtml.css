@@ -1,0 +1,23 @@
+﻿body {
+}
+
+.nav-department .nav-item {
+    color: #414141;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 3px solid #bfbfbf;
+}
+
+.nav-department .nav-item.active {
+    color: blue;
+    border-color: blue;
+}
+
+.nav-department .nav-item:hover {
+}
+
+#import_employees_table {
+    max-height: 300px;
+    overflow: auto;
+    display: block;
+}

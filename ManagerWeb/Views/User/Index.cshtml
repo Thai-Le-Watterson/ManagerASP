@@ -1,0 +1,242 @@
+﻿@model ManagerWeb.PageModels.UserModel
+@{
+    ViewData["Title"] = "User Manager";
+}
+
+<div class="row">
+    @if (!User.IsInRole("Admin")) {
+        <nav class="nav-department d-flex gap-2 flex-column col-3">
+            <a href="/User/@ViewBag.UserId" class="nav-item p-2">My department</a>
+            <a href="/User/Other/@ViewBag.UserId" class="nav-item p-2">Others</a>
+        </nav>
+        <div class="col-9">
+        </div>
+    } else
+    {
+        <h1 class="text-center my-4">Employee Manager</h1>
+        <form id="frm-create" asp-action="@ViewBag.Action" asp-controller="User" method="post">
+            <div class="row">
+                <div class="form-group col-md-6 col-12">
+                    @Html.LabelFor(temp => temp.UserName, new { @class = "form-label" })
+                    @Html.TextBoxFor(temp => temp.UserName, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-6 col-12">
+                    @Html.LabelFor(temp => temp.Email, new { @class = "form-label" })
+                    @if (ViewBag.Action == "Update")
+                    {
+                        @Html.TextBoxFor(temp => temp.Email, new { @class = "form-control", @readonly= "readonly" })
+                    }else
+                    {
+                        @Html.TextBoxFor(temp => temp.Email, new { @class = "form-control" })
+                    }
+                </div>
+                <div class="form-group col-md-6 col-12">
+                    @Html.LabelFor(temp => temp.DepartmentId, new { @class = "form-label" })
+                    <select asp-for="DepartmentId" asp-items="@ViewBag.departments" class="form-select">
+                        <option value="">Select department...</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6 col-12">
+                    @Html.LabelFor(temp => temp.Address, new { @class = "form-label" })
+                    @Html.TextBoxFor(temp => temp.Address, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-6 col-12">
+                    <label class="form-label">Role</label>
+                    @if (ViewBag.Action == "Update")
+                    {
+                        @if (ViewBag.Role == "Member")
+                        {
+                            <select class="form-select" name="Role">
+                                <option value="Member" selected="true">Member</option>
+                                <option value="Manager">Manager</option>
+                            </select>
+                        }else
+                        {
+                            <select class="form-select" name="Role">
+                                <option value="Member">Member</option>
+                                <option value="Manager" selected="true">Manager</option>
+                            </select>
+                        }
+                    }
+                    else
+                    {
+                        <select class="form-select" name="Role">
+                            <option value="Member" selected>Member</option>
+                            <option value="Manager">Manager</option>
+                        </select>
+                    }
+                </div>
+                <div class="col-12 d-flex justify-content-end my-3">
+                    @if (ViewBag.Action == "Update")
+                    {
+                        <input value="@ViewBag.updateUserId" name="Id" hidden />
+                        <button class="btn btn-success mx-3" type="submit">Save</button>
+                        <a href="/User" class="btn btn-danger">Cancel</a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" type="submit">Add</button>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Import
+                        </button>
+
+                        <a class="btn btn-info" asp-action="ExportEmployeeExcel">Export</a>
+                    }
+                </div>
+            </div>
+        </form>
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.usersCount; i++)
+                {
+                    <tr>
+                        <th scope="row">@(i + 1)</th>
+                        <td>@ViewBag.users[i].UserName</td>
+                        <td>@ViewBag.users[i].Email</td>
+                        <td>
+                            @if (ViewBag.users[i].Address != null){
+                                @ViewBag.users[i].Address
+                            } else {
+                                <i>Null</i>
+                            }
+                            </td>
+                        <td>
+                            @foreach (SelectListItem item in ViewBag.departments)
+                            {
+                                if (item.Value == ViewBag.users[i].DepartmentId.ToString())
+                                {
+                                    <span>@item.Text</span>
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td>@ViewBag.usersRole[i]</td>
+                        <td>
+                            <a href="/User/Update/@ViewBag.users[i].Id" class="btn btn-info">Edit</a>
+                            <a href="/User/Delete/@ViewBag.users[i].Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Modal -->
+        <form method="post" asp-action="UploadExcel" asp-controller="User" enctype="multipart/form-data">
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Import Employees From Excel File</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">Select Excel file</label>
+                                <input class="form-control" id="inp-file" type="file" name="file" />
+                                <input id="inp-file-path" type="text" name="filePath" hidden />
+                            </div>
+                            <div class="form-group mt-3">
+                                <table id="import_employees_table" class="table"></table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-close_modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add users</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+</div>
+
+<script>
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<script>
+    @* Generate table employees in excel file *@
+    const ExcelToJSON = function (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const data = e.target.result;
+            const workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+            workbook.SheetNames.forEach(function (sheetName) {
+                // Here is your object
+                const XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                @* console.log(XL_row_object); *@
+                @* const json_object = JSON.stringify(XL_row_object); *@
+                @* console.log(json_object); *@
+
+                const table_employees = document.getElementById("import_employees_table");
+                let htmlEmployeeTring = `<thead class="thead-dark"><tr>`;
+                const colunms = []
+
+                if (XL_row_object.length > 0) {
+                    Object.keys(XL_row_object[0]).forEach(key => {
+                        htmlEmployeeTring += `
+                            <th scope="col">${key}</th>
+                        `;
+                        colunms.push(key);
+                    });
+
+                    htmlEmployeeTring += `</tr></thead><tbody>`;
+
+                    XL_row_object.forEach(row => {
+                        htmlEmployeeTring += '<tr>';
+                        colunms.forEach(colunm => {
+                            htmlEmployeeTring += `<td scope="row">${row[colunm]}</td>`;
+                        })
+                        htmlEmployeeTring += '</tr>';
+                    })
+
+                    htmlEmployeeTring += `</tbody>`;
+
+                    table_employees.innerHTML = htmlEmployeeTring;
+                } else {
+                    table_employees.innerHTML = '';
+                }
+            })
+        };
+
+        reader.onerror = function (ex) {
+            console.log(ex);
+        };
+
+        reader.readAsBinaryString(file);
+    };
+
+
+    const inp_file = document.getElementById("inp-file");
+
+    inp_file.onchange = function (e) {
+        console.log(e)
+        document.getElementById("inp-file-path").value = e.target.value;
+        ExcelToJSON(e.target.files[0])
+    }
+
+    @* Clear data Modal when close *@
+    const btn_close_modal = document.getElementById("btn-close_modal");
+    btn_close_modal.onclick = function (e) {
+        inp_file.value = null;
+        document.getElementById("import_employees_table").innerHTML = '';
+    }
+</script>

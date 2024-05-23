@@ -1,0 +1,23 @@
+body[b-6d6mn3xqny] {
+}
+
+.nav-department .nav-item[b-6d6mn3xqny] {
+    color: #414141;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 3px solid #bfbfbf;
+}
+
+.nav-department .nav-item.active[b-6d6mn3xqny] {
+    color: blue;
+    border-color: blue;
+}
+
+.nav-department .nav-item:hover[b-6d6mn3xqny] {
+}
+
+#import_employees_table[b-6d6mn3xqny] {
+    max-height: 300px;
+    overflow: auto;
+    display: block;
+}

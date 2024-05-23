@@ -1,0 +1,112 @@
+/* _content/ManagerWeb/Views/Department/Index.cshtml.rz.scp.css */
+body[b-kfxrt43rs9] {
+}
+/* _content/ManagerWeb/Views/Shared/_Layout.cshtml.rz.scp.css */
+/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand[b-edn1lanldn] {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a[b-edn1lanldn] {
+  color: #0077cc;
+}
+
+.btn-primary[b-edn1lanldn] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active[b-edn1lanldn], .nav-pills .show > .nav-link[b-edn1lanldn] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top[b-edn1lanldn] {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom[b-edn1lanldn] {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-edn1lanldn] {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-edn1lanldn] {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer[b-edn1lanldn] {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+/* _content/ManagerWeb/Views/User/EmployeeInMyDepartment.cshtml.rz.scp.css */
+body[b-cf1duxln9t] {
+}
+
+.nav-department .nav-item[b-cf1duxln9t] {
+    color: #414141;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 3px solid #bfbfbf;
+}
+
+    .nav-department .nav-item.active[b-cf1duxln9t] {
+        color: blue;
+        border-color: blue;
+    }
+
+    .nav-department .nav-item:hover[b-cf1duxln9t] {
+    }
+/* _content/ManagerWeb/Views/User/EmployeeInOtherDepartment.cshtml.rz.scp.css */
+body[b-l0pfzut09o] {
+}
+
+.nav-department .nav-item[b-l0pfzut09o] {
+    color: #414141;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 3px solid #bfbfbf;
+}
+
+    .nav-department .nav-item.active[b-l0pfzut09o] {
+        color: blue;
+        border-color: blue;
+    }
+
+    .nav-department .nav-item:hover[b-l0pfzut09o] {
+    }
+/* _content/ManagerWeb/Views/User/Index.cshtml.rz.scp.css */
+body[b-6d6mn3xqny] {
+}
+
+.nav-department .nav-item[b-6d6mn3xqny] {
+    color: #414141;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 3px solid #bfbfbf;
+}
+
+.nav-department .nav-item.active[b-6d6mn3xqny] {
+    color: blue;
+    border-color: blue;
+}
+
+.nav-department .nav-item:hover[b-6d6mn3xqny] {
+}
+
+#import_employees_table[b-6d6mn3xqny] {
+    max-height: 300px;
+    overflow: auto;
+    display: block;
+}

@@ -1,0 +1,17 @@
+body[b-l0pfzut09o] {
+}
+
+.nav-department .nav-item[b-l0pfzut09o] {
+    color: #414141;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 3px solid #bfbfbf;
+}
+
+    .nav-department .nav-item.active[b-l0pfzut09o] {
+        color: blue;
+        border-color: blue;
+    }
+
+    .nav-department .nav-item:hover[b-l0pfzut09o] {
+    }

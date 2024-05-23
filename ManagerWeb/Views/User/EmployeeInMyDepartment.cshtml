@@ -1,0 +1,102 @@
+﻿@model ManagerWeb.PageModels.UserModel;
+
+<div class="row">
+    <nav class="nav-department d-flex gap-2 flex-column col-3">
+        <a href="/User/@ViewBag.UserId" class="nav-item active p-2">My department</a>
+        <a href="/User/Other/@ViewBag.UserId" class="nav-item p-2">Others</a>
+    </nav>
+    <div class="col-9">
+        @if (User.IsInRole("Manager"))
+        {
+            <form id="frm-create" asp-action="@ViewBag.Action" asp-controller="User" method="post">
+                <input name="ReturnURL" value="/User/@ViewBag.UserId" hidden />
+                <div class="row">
+                    <div class="form-group col-md-6 col-12">
+                        @Html.LabelFor(temp => temp.UserName, new { @class = "form-label" })
+                        @Html.TextBoxFor(temp => temp.UserName, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6 col-12">
+                        @Html.LabelFor(temp => temp.Email, new { @class = "form-label" })
+                        @if (ViewBag.Action == "Update")
+                        {
+                            @Html.TextBoxFor(temp => temp.Email, new { @class = "form-control", @readonly = "readonly" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(temp => temp.Email, new { @class = "form-control" })
+                        }
+                    </div>
+                    <input asp-for="DepartmentId" value="@ViewBag.User.DepartmentId" hidden />
+                    <input name="Role" value="Member" hidden />
+                    <div class="form-group col-md-6 col-12">
+                        @Html.LabelFor(temp => temp.Address, new { @class = "form-label" })
+                        @Html.TextBoxFor(temp => temp.Address, new { @class = "form-control" })
+                    </div>
+                    <div class="col-12 d-flex justify-content-end my-3">
+                        @if (ViewBag.Action == "Update")
+                        {
+                            <input value="@ViewBag.UpdateUserId" name="Id" hidden />
+                            <button class="btn btn-success mx-3" type="submit">Save</button>
+                            <a href="/User/@ViewBag.UserId" class="btn btn-danger">Cancel</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" type="submit">Add</button>
+                            <a class="btn btn-info ms-2" href="/User/Export-Excel/@ViewBag.User.DepartmentId">Export</a>
+                        }
+                    </div>
+            </div>
+            </form>
+        }
+        else
+        {
+            <a class="btn btn-info ms-2" href="/User/Export-Excel/@ViewBag.User.DepartmentId">Export</a>
+        }
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Position</th>
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <th scope="col">Edit</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.EmployeesCount; i++)
+                {
+                    <tr class="@(ViewBag.Employees[i].Id == ViewBag.UserId ? "fw-bold" : "")">
+                        <th scope="row">@(i + 1)</th>
+                        <td>@ViewBag.Employees[i].UserName</td>
+                        <td>@ViewBag.Employees[i].Email</td>
+                        <td>
+                            @if (ViewBag.Employees[i].Address != null)
+                            {
+                                @ViewBag.Employees[i].Address
+                            }
+                            else
+                            {
+                                <i>Null</i>
+                            }
+                        </td>
+                        <td>@ViewBag.ListDepartment[i].Text</td>
+                        <td>@ViewBag.ListUserRole[i]</td>
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <td>
+                                <a href="/User/@ViewBag.UserId/Update/@ViewBag.Employees[i].Id" class="btn btn-info">Edit</a>
+                                <a href="/User/Delete/@ViewBag.Employees[i].Id?ReturnURL=/User/@ViewBag.UserId" class="btn btn-danger">Delete</a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
